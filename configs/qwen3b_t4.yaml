@@ -1,0 +1,34 @@
+# QLoRA config tuned for a FREE Colab T4 (16GB, Turing).
+# Turing does NOT support bf16 -> we use fp16 everywhere. Do not "upgrade"
+# these to bf16 unless you're on an A100/L4/3090+; the T4 will crash.
+
+model_id: Qwen/Qwen2.5-3B-Instruct   # ungated, ~3B, fits T4 comfortably
+data: data/train.jsonl
+val_data: data/val.jsonl             # held-out set for eval (skipped if absent)
+output_dir: adapters/me
+
+# ---- Completion-only loss: learn ONLY your replies, not the other person's ----
+# These markers are ChatML (Qwen2.5). If you swap to a non-ChatML base model,
+# update them to that model's user/assistant turn prefixes.
+completion_only: true
+instruction_template: "<|im_start|>user\n"
+response_template: "<|im_start|>assistant\n"
+
+# ---- LoRA ----
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+# Attention + MLP projections. These names cover Qwen/Llama/Mistral/Phi.
+target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+# ---- Training (T4-safe) ----
+max_seq_length: 1024
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8      # effective batch = 16
+num_train_epochs: 3
+learning_rate: 0.0002
+warmup_ratio: 0.03
+lr_scheduler_type: cosine
+logging_steps: 10
+save_strategy: epoch
+seed: 42

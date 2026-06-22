@@ -1,0 +1,28 @@
+# ---- Your private data: NEVER commit chat exports or datasets ----
+exports/
+*_chat.txt
+chat.db
+result.json
+data/
+*.jsonl
+
+# ---- Model artifacts ----
+adapters/
+checkpoints/
+outputs/
+*.safetensors
+*.bin
+*.gguf
+
+# ---- Python ----
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# ---- OS / editor ----
+.DS_Store
+.vscode/
+.idea/
