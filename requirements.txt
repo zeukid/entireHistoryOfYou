@@ -1,18 +1,18 @@
 # Phase 1 (data pipeline) needs only the Python standard library.
-# The packages below are for Phase 2+ (training & demo).
+# The packages below are for Phase 2 (training).
 #
-# NOTE for Colab: torch is preinstalled — do NOT pin it here or you may
-# break the CUDA build. Pin the rest; bitsandbytes/transformers are the
-# version-fragile ones, so re-verify on a fresh runtime if you bump them.
-
-# Pinned to a known-good combo for Colab T4. These versions are tested
-# together; bumping trl/transformers is the most likely source of breakage
-# (the SFTTrainer API moves between minor versions). Re-verify if you change them.
-transformers==4.44.2
-peft==0.12.0
-trl==0.9.6
-bitsandbytes==0.43.3
-accelerate==0.33.0
-datasets==2.21.0
-gradio==4.44.0
+# Colab notes:
+#  * torch AND numpy are preinstalled and tied together — we do NOT pin either.
+#    Pinning them downgrades numpy and breaks Colab's torch (ABI mismatch).
+#  * We use loose floors and ride Colab's environment. train.py guards against
+#    the TRL/transformers API differences across versions (tokenizer vs
+#    processing_class, evaluation_strategy vs eval_strategy), so this is safe.
+#  * gradio is intentionally absent — not needed for training; install it
+#    separately only for the Phase 3 chat UI.
+transformers>=4.45
+trl>=0.11
+peft>=0.13
+bitsandbytes>=0.44
+accelerate>=0.34
+datasets>=2.20
 pyyaml>=6.0
